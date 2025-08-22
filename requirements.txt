@@ -2,7 +2,7 @@ pandas
 numpy 
 plotly
 seaborn
-time
+# time
 warnings
 matplotlib 
 IPython 
