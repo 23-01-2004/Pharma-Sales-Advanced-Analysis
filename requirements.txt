@@ -3,8 +3,9 @@ numpy
 plotly
 seaborn
 # time
-warnings
+# warnings
 matplotlib 
 IPython 
 scikit-learn 
 statsmodels
+streamlit 
