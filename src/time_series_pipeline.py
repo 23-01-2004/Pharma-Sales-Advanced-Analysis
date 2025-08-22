@@ -57,7 +57,7 @@ def generate_time_series_analysis(df):
     last_year_yoy = yoy_growth.iloc[-1]
     avg_yoy = yoy_growth.mean()
 
-    long_term_trend = "consistent 📈 growth" if avg_yoy > 0 else "fluctuations 📉"
+    long_term_trend = "Trend shows an oscillating behavior" if avg_yoy > 0 else "fluctuations 📉"
     trend_implication = "sustained widening of sales" if avg_yoy > 0 else "erratic growth of sales"
     insights["Yearly Sales"] = f"""
  Yearly Sales Performance Overview
@@ -66,7 +66,7 @@ def generate_time_series_analysis(df):
 - Lowest Sales Year: {lowest_year} with total sales of {lowest_sales:,.0f}.
 - YoY Growth (Last Year): {last_year_yoy:+.1f}%  
 - Average YoY Growth: {avg_yoy:+.1f}%  
-- Long-term Trend: {long_term_trend} observed over the years.  
+-  Trend: {long_term_trend} observed over the years.  
 - Interpretation: This indicates a {trend_implication}, highlighting how the sales trajectory has evolved historically.  
 - Additional Insight: The difference between highest and lowest sales years is {highest_sales - lowest_sales:,.0f}, showing the range of sales performance.  
 """
@@ -106,19 +106,19 @@ def generate_time_series_analysis(df):
         insights["Seasonal Decomposition"] = f"""
          Seasonal Decomposition Insights  
 
-        - Trend: The data shows a clear long-term {'upward 📈' if result.trend.dropna().iloc[-1] > result.trend.dropna().iloc[0] else 'downward 📉'} movement.  
+        - Trend: The data shows a clear long-term {'upward ' if result.trend.dropna().iloc[-1] > result.trend.dropna().iloc[0] else 'downward '} movement.  
           - This indicates that the underlying demand/metric is {'growing steadily over time, which may suggest market expansion, improved adoption, or positive external influences.' if result.trend.dropna().iloc[-1] > result.trend.dropna().iloc[0] else 'shrinking gradually, possibly due to market saturation, reduced demand, or external challenges.'}  
 
         - Seasonality: Strong recurring cycles every 12 months are observed.  
-          - This suggests that external factors such as **festive seasons, yearly demand surges, or recurring events** are influencing the data regularly.  
-          - Seasonality patterns can help with **forecasting and resource planning (e.g., stock, manpower, or budget allocation).  
+          - This suggests that external factors such as festive seasons, yearly demand surges, or recurring events are influencing the data regularly.  
+          - Seasonality patterns can help with forecasting and resource planning (e.g., stock, manpower, or budget allocation).  
 
         - Residuals: The residual component indicates {'relatively stable variations ' if result.resid.std() < result.observed.std()*0.5 else 'significant irregularities '}.  
           - {'Since the residual noise is low, the model fits the data well and most variations are explained by trend and seasonality.' if result.resid.std() < result.observed.std()*0.5 else 'High residual volatility means unexpected shocks or outliers exist, which may require further investigation (e.g., promotions, economic events, or anomalies).'}  
 
-         Key Takeaways:
+          Key Takeaways:
         - The data can be reliably forecasted** using trend + seasonality.  
-        - This decomposition is useful for strategic decision-making, such as **forecasting, anomaly detection, and planning resource allocation.
+        - This decomposition is useful for strategic decision-making, such as forecasting, anomaly detection, and planning resource allocation.
         """
 
 

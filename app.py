@@ -1,14 +1,11 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
 import plotly.express as px
-import plotly.graph_objects as go
 from datetime import datetime
 import numpy as np
 
 # Import your existing modules
-from src.eda_utils import dataset_overview
-from src.eda_stats import summary_statistics, plot_numerical_distributions
+from src.eda_stats import summary_statistics
 from src.eda_categorical import create_categorical_pie_charts
 from src.top_products_pipeline import top_products_chart
 from src.bivariate_analysis import sales_analysis_charts
@@ -474,13 +471,29 @@ def create_dataset_overview(df):
         </div>
         """, unsafe_allow_html=True)
     
+    # Exclude longitude and latitude
+    # Exclude longitude and latitude from numeric columns
+    # If numeric_cols is a list of numeric column names
+    # Numeric feature count minus 3
+    numeric_count = numeric_cols - 3  # exclude longitude, latitude, year
+
     with col3:
         st.markdown(f"""
         <div class="custom-metric">
-            <h3>{numeric_cols}</h3>
+            <h3>{numeric_count}</h3>
             <p>Numeric Features</p>
         </div>
         """, unsafe_allow_html=True)
+
+    # Add explanatory note in plain markdown
+    st.markdown("""
+    *Note: 'longitude' & 'latitude' are coordinates, 'Year' is a time feature, so they are not considered as numeric features.*
+    """)
+
+
+
+
+
     
     with col4:
         st.markdown(f"""
@@ -553,16 +566,16 @@ def create_enhanced_tabs(df):
     tab_config = [
         (" Overview", "Dataset structure and key metrics"),
         (" Statistics", "Descriptive statistics and distributions"),
-        (" Categories", "Categorical data analysis"),
+        (" Categorical Analysis", "Categorical data analysis"),
         (" Top Products", "Best performing products"),
-        (" Numerical", "Numerical data relationships"),
-        (" Multivariate", "Multi-dimensional analysis"),
+        (" Numerical Analysis", "Numerical data relationships"),
+        (" Multivariate Analysis", "Multi-dimensional analysis"),
         (" Sales Analysis", "Revenue and quantity insights"),
-        (" Time Series", "Trends and growth patterns"),
-        (" Geography", "Location-based performance"),
-        (" Sales Force", "Team and rep performance"),
-        (" Channels", "Channel effectiveness"),
-        (" Products", "Product performance deep-dive")
+        (" Time Series Analysis", "Trends and growth patterns"),
+        (" Geographical Analysis", "Location-based performance"),
+        (" Sales Force Analysis", "Team and rep performance"),
+        # (" Channels", "Channel effectiveness"),
+        (" Products Analysis", "Product performance deep-dive")
     ]
     
     tab_names = [config[0] for config in tab_config]
@@ -812,7 +825,7 @@ def create_enhanced_tabs(df):
         ("generate_time_series_analysis", " Time Series & Growth Trends"),
         ("generate_geographical_sales_analysis", " Geographic Performance Map"),
         ("generate_sales_rep_analysis", " Sales Team Performance"),
-        ("generate_channel_analysis", "Channel Effectiveness"),
+        # ("generate_channel_analysis", "Channel Effectiveness"),
         ("generate_product_analysis", " Advanced Product Analytics")
     ])):
         with tab:
@@ -915,26 +928,29 @@ def create_enhanced_tabs(df):
                                         unsafe_allow_html=True
 
                                 )
-                    if function_name == "generate_channel_analysis":
-                        figs, insights = generate_channel_analysis(df)
+                    # if function_name == "generate_channel_analysis":
+                    #     figs, insights = generate_channel_analysis(df)
 
-                        tabs = st.tabs(figs.keys())
-                        for i, key in enumerate(figs.keys()):
-                            with tabs[i]:
-                                st.plotly_chart(figs[key], use_container_width=True)
-                                st.markdown(
-                                    f"""
-                                    <div style="background-color:#1e1e1e; padding:15px; border-radius:10px; 
-                                                    border:1px solid #333; color:white; font-size:15px;">
-                                            <b> Dynamic Geospatial Insights:</b>
-                                            <ul>
-                                                {''.join([f"<li>{line.strip('- ').strip()}</li>" for line in insights[key].splitlines() if line.strip()])}
-                                            </ul>
-                                        </div>
-                                        """,
-                                        unsafe_allow_html=True
+                    #     tabs = st.tabs(list(figs.keys()))  # use dict keys for tabs
 
-                                )
+                    #     for i, key in enumerate(figs.keys()):
+                    #         with tabs[i]:
+                    #             st.plotly_chart(figs[key], use_container_width=True)
+                    #             st.markdown(
+                    #                 f"""
+                    #                 <div style="background-color:#1e1e1e; padding:15px; border-radius:10px; 
+                    #                             border:1px solid #333; color:white; font-size:15px;">
+                    #                     <b> Dynamic Geospatial Insights:</b>
+                    #                     <ul>
+                    #                         {''.join([f"<li>{line.strip('- ').strip()}</li>" for line in insights[key].splitlines() if line.strip()])}
+                    #                     </ul>
+                    #                 </div>
+                    #                 """,
+                    #                 unsafe_allow_html=True
+                    #             )
+
+
+
                     
                     if function_name == "generate_product_analysis":
                         figs, insights = generate_product_analysis(df)
@@ -1003,7 +1019,7 @@ def create_footer():
     st.markdown("""
     <div style="text-align: center; padding: 2rem; background: rgba(255,255,255,0.05); border-radius: 15px; margin-top: 2rem;">
         <h4> Advanced EDA Dashboard</h4>
-        <p>Built with ❤️ using Streamlit | Powered by Python & Plotly</p>
+        <p>Built using Streamlit | Powered by Python & Plotly</p>
         <p style="font-size: 0.8rem; opacity: 0.7;">
             Dashboard version 2.0 
         </p>
