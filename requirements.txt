@@ -1,0 +1,10 @@
+pandas
+numpy 
+plotly
+seaborn
+time
+warnings
+matplotlib 
+IPython 
+scikit-learn 
+statsmodels
